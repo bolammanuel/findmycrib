@@ -1,16 +1,31 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MapPin, Heart, User, Briefcase } from 'lucide-react';
 
 const FlatmateCard = ({ flatmate }) => {
+  const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const toggleFavorite = () => {
+  const toggleFavorite = (e) => {
+    e.stopPropagation();
     setIsFavorite(!isFavorite);
     console.log(`Flatmate ${flatmate.id} favorite status:`, !isFavorite);
   };
 
+  const handleViewProfile = () => {
+    navigate(`/flatmate/${flatmate.id}`);
+  };
+
+  const handleViewClick = (e) => {
+    e.stopPropagation();
+    navigate(`/flatmate/${flatmate.id}`);
+  };
+
   return (
-    <div className="bg-white dark:bg-neutral-950 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+    <div 
+      onClick={handleViewProfile}
+      className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
+    >
       {/* Image Section */}
       <div className="relative h-48">
         <img
@@ -99,8 +114,11 @@ const FlatmateCard = ({ flatmate }) => {
           <span className="text-sm text-gray-500 dark:text-gray-400">
             Available: {flatmate.availableFrom}
           </span>
-          <button className="text-teal-600 dark:text-teal-400 font-medium text-sm hover:text-teal-700 dark:hover:text-teal-300 transition-colors">
-            View
+          <button 
+            onClick={handleViewClick}
+            className="text-teal-600 dark:text-teal-400 font-medium text-sm hover:text-teal-700 dark:hover:text-teal-300 transition-colors"
+          >
+            View Profile
           </button>
         </div>
       </div>

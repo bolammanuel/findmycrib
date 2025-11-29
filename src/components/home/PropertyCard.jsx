@@ -1,16 +1,31 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Bed, Bath, MapPin, Heart } from 'lucide-react';
 
 const PropertyCard = ({ property }) => {
+  const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const toggleFavorite = () => {
+  const toggleFavorite = (e) => {
+    e.stopPropagation(); // Prevent navigation when clicking heart
     setIsFavorite(!isFavorite);
     console.log(`Property ${property.id} favorite status:`, !isFavorite);
   };
 
+  const handleViewProperty = () => {
+    navigate(`/property/${property.id}`);
+  };
+
+  const handleViewClick = (e) => {
+    e.stopPropagation();
+    navigate(`/property/${property.id}`);
+  };
+
   return (
-    <div className="bg-white dark:bg-neutral-950 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+    <div 
+      onClick={handleViewProperty}
+      className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
+    >
       {/* Image Section */}
       <div className="relative h-48">
         <img
@@ -91,7 +106,10 @@ const PropertyCard = ({ property }) => {
               {property.agent}
             </span>
           </div>
-          <button className="text-teal-600 dark:text-teal-400 font-medium text-sm hover:text-teal-700 dark:hover:text-teal-300 transition-colors">
+          <button 
+            onClick={handleViewClick}
+            className="text-teal-600 dark:text-teal-400 font-medium text-sm hover:text-teal-700 dark:hover:text-teal-300 transition-colors"
+          >
             View
           </button>
         </div>
