@@ -7,24 +7,24 @@ const PropertyCard = ({ property }) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const toggleFavorite = (e) => {
-    e.stopPropagation(); // Prevent navigation when clicking heart
+    e.stopPropagation(); // Prevent card click when clicking heart
     setIsFavorite(!isFavorite);
     console.log(`Property ${property.id} favorite status:`, !isFavorite);
   };
 
-  const handleViewProperty = () => {
+  const handleCardClick = () => {
     navigate(`/property/${property.id}`);
   };
 
   const handleViewClick = (e) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent card click when clicking View button
     navigate(`/property/${property.id}`);
   };
 
   return (
     <div 
-      onClick={handleViewProperty}
-      className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
+      onClick={handleCardClick}
+      className="bg-white dark:bg-neutral-950 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
     >
       {/* Image Section */}
       <div className="relative h-48">
