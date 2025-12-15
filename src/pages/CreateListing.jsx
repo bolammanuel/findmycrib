@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Moon, Sun, User, ChevronRight, ChevronLeft, Upload, Calendar } from 'lucide-react';
+import { Moon, Sun, User, ChevronRight, ChevronLeft, Upload, Calendar, X } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { useListings } from '../context/ListingsContext';
 
 const CreateListing = () => {
     const navigate = useNavigate();
     const { darkMode, toggleDarkMode } = useTheme();
+    const { addProperty } = useListings(); // Add this line
     const [currentStep, setCurrentStep] = useState(1);
     const totalSteps = 3;
 
@@ -44,9 +46,63 @@ const CreateListing = () => {
         }));
     };
 
+    const validateStep = (step) => {
+        switch (step) {
+            case 1:
+                if (!formData.listingType) {
+                    alert('Please select a listing type');
+                    return false;
+                }
+                if (!formData.propertyTitle.trim()) {
+                    alert('Please enter a property title');
+                    return false;
+                }
+                if (!formData.location.trim()) {
+                    alert('Please enter a location');
+                    return false;
+                }
+                if (!formData.monthlyPrice || formData.monthlyPrice <= 0) {
+                    alert('Please enter a valid monthly price');
+                    return false;
+                }
+                return true;
+
+            case 2:
+                if (!formData.bedrooms) {
+                    alert('Please select number of bedrooms');
+                    return false;
+                }
+                if (!formData.bathrooms) {
+                    alert('Please select number of bathrooms');
+                    return false;
+                }
+                if (!formData.description.trim()) {
+                    alert('Please enter a description');
+                    return false;
+                }
+                return true;
+
+            case 3:
+                if (formData.photos.length === 0) {
+                    alert('Please upload at least one photo');
+                    return false;
+                }
+                if (!formData.moveInDate) {
+                    alert('Please select a preferred move-in date');
+                    return false;
+                }
+                return true;
+
+            default:
+                return true;
+        }
+    };
+
     const handleNext = () => {
-        if (currentStep < totalSteps) {
-            setCurrentStep(currentStep + 1);
+        if (validateStep(currentStep)) {
+            if (currentStep < totalSteps) {
+                setCurrentStep(currentStep + 1);
+            }
         }
     };
 
@@ -57,14 +113,62 @@ const CreateListing = () => {
     };
 
     const handlePublish = () => {
+        // Validate all steps one more time
+        if (!validateStep(1) || !validateStep(2) || !validateStep(3)) {
+            return;
+        }
         console.log('Publishing listing:', formData);
         // Handle form submission
+        addProperty({
+            title: formData.propertyTitle,
+            location: formData.location,
+            price: parseInt(formData.monthlyPrice),
+            period: 'month',
+            beds: parseInt(formData.bedrooms) || 0,
+            baths: parseInt(formData.bathrooms) || 0,
+            amenities: formData.amenities,
+            description: formData.description,
+            listingType: formData.listingType,
+            photos: formData.photos,
+            moveInDate: formData.moveInDate,
+            lifestylePreference: formData.lifestylePreference
+        });
         alert('Listing published successfully!');
         navigate('/');
     };
 
     const calculateProgress = () => {
         return (currentStep / totalSteps) * 100;
+    };
+
+    const handlePhotoUpload = (files) => {
+        const fileArray = Array.from(files);
+        const validFiles = fileArray.filter(file => {
+            // Check file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert(`${file.name} is too large. Max size is 5MB.`);
+                return false;
+            }
+            return true;
+        });
+
+        const photoObjects = validFiles.map(file => ({
+            file: file,
+            preview: URL.createObjectURL(file),
+            name: file.name
+        }));
+
+        setFormData(prev => ({
+            ...prev,
+            photos: [...prev.photos, ...photoObjects]
+        }));
+    };
+
+    const removePhoto = (index) => {
+        setFormData(prev => ({
+            ...prev,
+            photos: prev.photos.filter((_, i) => i !== index)
+        }));
     };
 
     return (

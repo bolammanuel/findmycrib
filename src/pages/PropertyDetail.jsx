@@ -3,73 +3,62 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Share2, Heart, Bed, Bath, MapPin, Calendar, Phone, MessageCircle, Star } from 'lucide-react';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
+import { useListings } from '../context/ListingsContext';
 
 const PropertyDetail = () => {
-  const { _id } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
+  const { getPropertyById } = useListings();
   const [isFavorite, setIsFavorite] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
 
-  // Mock property data - In real app, fetch based on id
-  const property = {
-    id: 1,
-    title: 'Modern Luxury Apartment in Yaba',
-    location: 'Shomolu, Yaba',
-    price: 65000,
-    period: 'Night',
-    beds: 2,
-    baths: 3,
-    type: 'Shortlet',
-    verified: true,
-    availableFrom: 'Immediately',
-    images: [
-      'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&h=600&fit=crop'
-    ],
-    description: 'Lorem ipsum dolor sit amet consectetur. Faucibus vitae nunc rhoncus et quam. Posuere accumsan enim purus eget amet ultrices accumsan. Duis donec ut sed lacus magna pellentesque proin. Duis est morbi eget faucibus.Duis est morbi eget faucibus.',
-    amenities: [
-      { name: 'Parking', icon: '🚗' },
-      { name: 'Furnished', icon: '🛋️' },
-      { name: 'Gym', icon: '💪' },
-      { name: 'High-Speed WiFi', icon: '📶' },
-      { name: 'Air Conditioning', icon: '❄️' },
-      { name: 'Pool', icon: '🏊' }
-    ],
-    agent: {
-      name: 'David Pedro',
-      rating: 4.9,
-      responseRate: '98%',
-      verified: true,
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
-      phone: '+234 80 *** *** ***'
-    }
-  };
+  // Get property from context
+  const property = getPropertyById(id);
+
+  // If property not found, show error
+  if (!property) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <Header />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Property Not Found
+          </h1>
+          <button
+            onClick={() => navigate('/')}
+            className="text-teal-600 dark:text-teal-400 hover:underline"
+          >
+            Back to Home
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
   };
 
   const handleShare = () => {
-    // Implement share functionality
     console.log('Share property');
   };
 
   const handleChatWithOwner = () => {
-    // Implement chat functionality
     console.log('Chat with owner');
   };
 
   const handleCall = () => {
-    // Implement call functionality
     console.log('Call owner');
   };
+
+  // Use property.images array or fallback to single image
+  const propertyImages = property.images || [property.image];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Header />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Back Button */}
         <button
@@ -86,21 +75,20 @@ const PropertyDetail = () => {
             {/* Main Image */}
             <div className="relative h-96 rounded-2xl overflow-hidden">
               <img
-                src={property.images[activeImage]}
+                src={propertyImages[activeImage]}
                 alt={property.title}
                 className="w-full h-full object-cover"
               />
               {/* Image Navigation Dots */}
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                {property.images.map((_, index) => (
+                {propertyImages.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setActiveImage(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      activeImage === index
+                    className={`w-2 h-2 rounded-full transition-all ${activeImage === index
                         ? 'bg-white w-6'
                         : 'bg-white/50'
-                    }`}
+                      }`}
                   />
                 ))}
               </div>
@@ -108,15 +96,14 @@ const PropertyDetail = () => {
 
             {/* Thumbnail Images */}
             <div className="grid grid-cols-4 gap-3">
-              {property.images.map((image, index) => (
+              {propertyImages.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveImage(index)}
-                  className={`relative h-24 rounded-lg overflow-hidden border-2 transition-all ${
-                    activeImage === index
+                  className={`relative h-24 rounded-lg overflow-hidden border-2 transition-all ${activeImage === index
                       ? 'border-teal-600 dark:border-teal-500'
                       : 'border-transparent'
-                  }`}
+                    }`}
                 >
                   <img
                     src={image}
@@ -133,12 +120,12 @@ const PropertyDetail = () => {
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 text-sm font-semibold px-3 py-1 rounded-full">
-                      {property.type}
+                    <span className="bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 text-sm font-semibold px-3 py-1 rounded-full capitalize">
+                      {property.listingType || 'ShortLet'}
                     </span>
-                    {property.verified && (
+                    {property.featured && (
                       <span className="bg-teal-100 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 text-sm font-semibold px-3 py-1 rounded-full">
-                        Verified
+                        Featured
                       </span>
                     )}
                   </div>
@@ -162,11 +149,10 @@ const PropertyDetail = () => {
                     className="p-3 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                   >
                     <Heart
-                      className={`w-5 h-5 ${
-                        isFavorite
+                      className={`w-5 h-5 ${isFavorite
                           ? 'fill-red-500 text-red-500'
                           : 'text-gray-700 dark:text-gray-300'
-                      }`}
+                        }`}
                     />
                   </button>
                 </div>
@@ -201,24 +187,25 @@ const PropertyDetail = () => {
               </div>
 
               {/* Amenities */}
-              <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                  Amenities
-                </h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {property.amenities.map((amenity, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
-                    >
-                      <span className="text-2xl">{amenity.icon}</span>
-                      <span className="text-gray-700 dark:text-gray-300 font-medium">
-                        {amenity.name}
-                      </span>
-                    </div>
-                  ))}
+              {property.amenities && property.amenities.length > 0 && (
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                    Amenities
+                  </h2>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {property.amenities.map((amenity, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                      >
+                        <span className="text-gray-700 dark:text-gray-300 font-medium">
+                          {amenity}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Availability */}
               <div>
@@ -227,9 +214,21 @@ const PropertyDetail = () => {
                 </h2>
                 <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                   <Calendar className="w-5 h-5" />
-                  <span>Available: <span className="font-semibold">{property.availableFrom}</span></span>
+                  <span>Available from: <span className="font-semibold">{property.availableFrom || property.moveInDate}</span></span>
                 </div>
               </div>
+
+              {/* Lifestyle Preference */}
+              {property.lifestylePreference && (
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    Lifestyle Preference
+                  </h2>
+                  <span className="inline-block bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-lg font-medium capitalize">
+                    {property.lifestylePreference}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -262,7 +261,7 @@ const PropertyDetail = () => {
                   className="w-full border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   <Phone className="w-5 h-5" />
-                  {property.agent.phone}
+                  +234 80 *** *** ***
                 </button>
               </div>
 
@@ -272,32 +271,26 @@ const PropertyDetail = () => {
                   Hosted by
                 </h3>
                 <div className="flex items-start gap-3">
-                  <img
-                    src={property.agent.image}
-                    alt={property.agent.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
+                  <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className="font-semibold text-gray-900 dark:text-white">
-                        {property.agent.name}
+                        {property.agent}
                       </h4>
-                      {property.agent.verified && (
-                        <span className="text-xs bg-teal-100 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 px-2 py-0.5 rounded">
-                          Verified Host
-                        </span>
-                      )}
+                      <span className="text-xs bg-teal-100 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 px-2 py-0.5 rounded">
+                        Verified Host
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <div className="flex items-center gap-1">
                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                         <span className="font-semibold text-gray-900 dark:text-white">
-                          {property.agent.rating}
+                          4.9
                         </span>
                       </div>
                     </div>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                      Response rate: {property.agent.responseRate}
+                      Response rate: 98%
                     </p>
                   </div>
                 </div>
