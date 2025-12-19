@@ -4,13 +4,16 @@ import './index.css'
 import App from './App.jsx'
 import { ThemeProvider } from './context/ThemeContext'
 import { ListingsProvider } from './context/ListingsContext'
+import { AuthProvider } from './context/AuthContext'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>
-      <ListingsProvider>
-        <App />
-      </ListingsProvider>
+      <AuthProvider>
+        <ListingsProvider>
+          <App />
+        </ListingsProvider>
+      </AuthProvider>
     </ThemeProvider>
   </StrictMode>,
 )

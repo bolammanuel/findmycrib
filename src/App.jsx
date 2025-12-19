@@ -5,6 +5,7 @@ import PropertyDetail from './pages/PropertyDetail';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import CreateListing from './pages/CreateListing';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/become-host" element={<CreateListing />} />
+        <Route path="/profile" element={<UserProfile />} />
         {/* We'll add more routes later */}
         {/* <Route path="/flatmate/:id" element={<FlatmateProfile />} /> */}
       </Routes>

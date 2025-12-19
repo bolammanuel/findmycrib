@@ -18,7 +18,7 @@ const PropertyDetail = () => {
   // If property not found, show error
   if (!property) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-neutra-900 dark:bg-neutral-900">
         <Header />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
@@ -56,7 +56,7 @@ const PropertyDetail = () => {
   const propertyImages = property.images || [property.image];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
       <Header />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -86,8 +86,8 @@ const PropertyDetail = () => {
                     key={index}
                     onClick={() => setActiveImage(index)}
                     className={`w-2 h-2 rounded-full transition-all ${activeImage === index
-                        ? 'bg-white w-6'
-                        : 'bg-white/50'
+                      ? 'bg-white w-6'
+                      : 'bg-white/50'
                       }`}
                   />
                 ))}
@@ -101,8 +101,8 @@ const PropertyDetail = () => {
                   key={index}
                   onClick={() => setActiveImage(index)}
                   className={`relative h-24 rounded-lg overflow-hidden border-2 transition-all ${activeImage === index
-                      ? 'border-teal-600 dark:border-teal-500'
-                      : 'border-transparent'
+                    ? 'border-teal-600 dark:border-teal-500'
+                    : 'border-transparent'
                     }`}
                 >
                   <img
@@ -150,8 +150,8 @@ const PropertyDetail = () => {
                   >
                     <Heart
                       className={`w-5 h-5 ${isFavorite
-                          ? 'fill-red-500 text-red-500'
-                          : 'text-gray-700 dark:text-gray-300'
+                        ? 'fill-red-500 text-red-500'
+                        : 'text-gray-700 dark:text-gray-300'
                         }`}
                     />
                   </button>
