@@ -22,7 +22,7 @@ const FlatmateCard = ({ flatmate }) => {
   };
 
   return (
-    <div 
+    <div
       onClick={handleViewProfile}
       className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
     >
@@ -45,16 +45,15 @@ const FlatmateCard = ({ flatmate }) => {
           </span>
         </div>
         {/* Favorite Icon */}
-        <button 
+        <button
           onClick={toggleFavorite}
           className="absolute top-3 right-3 bg-white dark:bg-gray-700 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200 hover:scale-110"
         >
-          <Heart 
-            className={`w-5 h-5 transition-colors ${
-              isFavorite 
-                ? 'fill-red-500 text-red-500' 
-                : 'text-gray-600 dark:text-gray-300'
-            }`}
+          <Heart
+            className={`w-5 h-5 transition-colors ${isFavorite
+              ? 'fill-red-500 text-red-500'
+              : 'text-gray-600 dark:text-gray-300'
+              }`}
           />
         </button>
       </div>
@@ -100,7 +99,7 @@ const FlatmateCard = ({ flatmate }) => {
         {/* Preferences */}
         <div className="flex flex-wrap gap-2 mb-4">
           {flatmate.preferences.slice(0, 2).map((pref, index) => (
-            <span 
+            <span
               key={index}
               className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded"
             >
@@ -114,7 +113,7 @@ const FlatmateCard = ({ flatmate }) => {
           <span className="text-sm text-gray-500 dark:text-gray-400">
             Available: {flatmate.availableFrom}
           </span>
-          <button 
+          <button
             onClick={handleViewClick}
             className="text-teal-600 dark:text-teal-400 font-medium text-sm hover:text-teal-700 dark:hover:text-teal-300 transition-colors"
           >
