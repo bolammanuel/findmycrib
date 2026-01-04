@@ -84,7 +84,7 @@ const UserProfile = () => {
             id: 1,
             property: 'Modern 2BR Apartment in Lekki',
             sender: 'Sarah Johnson',
-            message: 'The property is available for viewing this weekend.',
+            message: 'The property is available for Inspection next weekend.',
             timestamp: '10/15/2025, 6:53:45 AM',
             isNew: true,
             avatar: 'S'
@@ -93,7 +93,7 @@ const UserProfile = () => {
             id: 2,
             property: 'Luxury Studio with Pool Access',
             sender: 'Michael Chen',
-            message: 'Thank you for your interest. When would you like to schedule a tour?',
+            message: 'Thank you for your interest. Whats your conveneient time for a tour?',
             timestamp: '10/15/2025, 6:54:14 AM',
             isNew: false,
             avatar: 'S'
